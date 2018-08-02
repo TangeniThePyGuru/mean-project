@@ -1,0 +1,3 @@
+-- generating components without the spec file
+ng generate component --spec=false component-name
+ng g c testfile --spec false
