@@ -1,4 +1,4 @@
-<textarea type="textarea" rows="5" [value]="'Test'" #postInput>{{ newPost }}</textarea>
+<textarea type="textarea" rows="5" [(ngModel)]="enteredValue">{{ newPost }}</textarea>
     <hr>
 <button (click)="onAddPost(postInput)">Save Post</button>
 <p>{{ newPost }}</p>
