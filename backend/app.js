@@ -3,9 +3,19 @@
  */
 const express = require('express');
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+
+const Post = require('./models/post')
 
 const app = express();
-
+// connects us to our mongo database
+mongoose.connect("mongodb+srv://admin:zDGY9lDDM4dmAsOX@cluster0-9tywo.mongodb.net/node-angular?retryWrites=true")
+    .then(() => {
+        console.log('Connected to database!')
+    })
+    .catch((error) => {
+        console.log('Connection failed!\nError: '+error)
+    })
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -22,30 +32,27 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-    const post = req.body;
-    console.log(post);
+    //mongoose automatically adds the id attribute for us
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content
+    });
+    post.save();
+    // console.log(post);
     // 201 resource was created
     res.status(201).json({
         message: 'Post added successfully'});
 })
 
 app.get('/api/posts' ,(req, res, next) => {
-    const posts = [
-        {
-            id: "fadsa55",
-            title: "Fist server-side post",
-            content: "This is coming from the server"
-        },
-        {
-            id: "fadsa56",
-            title: "Second server-side post",
-            content: "This is coming from the server too"
-        }
-    ];
-    res.status(200).json({
-        message: 'Posts fetched successfully',
-        posts: posts
-    })
+    Post.find()
+        .then(documents => {
+            console.log(documents);
+            res.status(200).json({
+                message: 'Posts fetched successfully',
+                posts: documents
+            })
+        })
 });
 
 module.exports = app;
