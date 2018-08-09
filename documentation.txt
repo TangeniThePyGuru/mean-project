@@ -1,3 +1,49 @@
 -- generating components without the spec file
-ng generate component --spec=false component-name
-ng g c testfile --spec false
+
+-- Excluding the spec file when generating
+    ng g c testfile --spec false
+
+-- installing the nodemon packegae
+    npm install --save-dev nodemon
+
+-- running nodemon server for dev
+    npm run start:server
+
+-- CORS - Cross Origin Resource Sharing
+    caused when the front-end app and the backend app are running on different domains
+    it is a security mechanism
+    - app.use((req, res, next) => {
+          res.setHeader(
+              "Access-Control-Allow-Origin", "*");
+          res.setHeader(
+              "Access-Control-Allow-Headers",
+              "Origin, X-Requested-With, Content-Type, Accept");
+          res.setHeader(
+              "Access-Control-Allow-Methods",
+              "GET, POST, PATCH, DELETE, OPTIONS");
+          next();
+      });
+      - the OPTIONS htt request method should be added always regardless of whether you directly you use it or not
+        it is used by the application
+
+-- Angular can be directly connected to mongodb but it is very unsecure when it comes to authentication
+
+-- MongoDb Atlas
+   username: admin
+   password: zDGY9lDDM4dmAsOX
+
+-- IP whitelist
+    IP changes so you must change it over time or access it from anywhere
+
+-- install mongoose driver
+    allows us to interact with our mongo db server
+    allows you to use schemas
+
+    npm install --save mongoose
+
+-- using the mongo shell to access the database
+
+    -- connect via the terminal
+    mongo "mongodb+srv://cluster0-9tywo.mongodb.net/test" --username admin
+    db.posts.find() to show the records in an object
+    use the "help" command for assistance
