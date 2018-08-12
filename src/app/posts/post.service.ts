@@ -40,13 +40,24 @@ export class PostService {
 
   addPost(title: string, content: string) {
     const post: Post = {id: null, title: title, content: content};
-    this.http.post<{message: string}>(`${CONFIG.api_url}/api/posts`, post)
+    this.http.post<{message: string, postId: string}>(`${CONFIG.api_url}/api/posts`, post)
         .subscribe((responseData) => {
-          console.log(responseData.message);
+            post.id = responseData.postId;
           // only happen when post has been updated
           this.posts.push(post);
+          // update the array on the interface
           this.postsUpdated.next([...this.posts]);
         });
 
+  }
+
+  deletePost(postId: string) {
+      this.http.delete(`${CONFIG.api_url}/api/posts/${postId}`)
+          .subscribe(() => {
+            console.log('Deleted');
+            const updatedPosts = this.posts.filter(post => post.id !== postId);
+            this.posts = updatedPosts;
+            this.postsUpdated.next([...this.posts]);
+          });
   }
 }
