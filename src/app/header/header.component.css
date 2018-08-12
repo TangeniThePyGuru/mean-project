@@ -1,0 +1,14 @@
+li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.spacer {
+    /*makes sure all the available space is taken up*/
+    flex: 1 1 auto;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
