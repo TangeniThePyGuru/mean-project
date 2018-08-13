@@ -51,6 +51,25 @@ export class PostService {
 
   }
 
+  updatePost(id: string, title: string, content: string) {
+      const post = {id: id, title: title, content: content};
+      this.http.put(`${CONFIG.api_url}/api/posts/${id}`, post)
+          .subscribe((responseData) => {
+              // update the newly added post on the front-end
+              const updatedPosts = [...this.posts];
+              const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+              updatedPosts[oldPostIndex] = post;
+              this.posts = updatedPosts;
+              this.postsUpdated.next([...this.posts]);
+          });
+  }
+
+  getPost(postId: string) {
+      // clones the object
+      // <Post>{...this.posts.find(p => p.id === postId)}
+      return this.http.get<{_id: string, title: string, content: string}>(`${CONFIG.api_url}/api/posts/${postId}`);
+  }
+
   deletePost(postId: string) {
       this.http.delete(`${CONFIG.api_url}/api/posts/${postId}`)
           .subscribe(() => {
