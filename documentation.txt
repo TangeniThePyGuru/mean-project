@@ -47,3 +47,9 @@
     mongo "mongodb+srv://cluster0-9tywo.mongodb.net/test" --username admin
     db.posts.find() to show the records in an object
     use the "help" command for assistance
+
+-- angular form
+    creating and adding items can actually be done on the same form
+    [ngModel] is different from ngModel
+    [ngModel] binds to a specific attribute
+    ngModel binds to a specific
