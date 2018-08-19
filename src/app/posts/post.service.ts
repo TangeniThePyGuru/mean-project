@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {CONFIG} from '../config/config';
 import { map } from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { map } from 'rxjs/operators';
 export class PostService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   // transform the post
   getPosts() {
     // a new array is created with the previous array being copied
@@ -42,11 +43,13 @@ export class PostService {
     const post: Post = {id: null, title: title, content: content};
     this.http.post<{message: string, postId: string}>(`${CONFIG.api_url}/api/posts`, post)
         .subscribe((responseData) => {
-            post.id = responseData.postId;
+          post.id = responseData.postId;
           // only happen when post has been updated
           this.posts.push(post);
           // update the array on the interface
           this.postsUpdated.next([...this.posts]);
+
+          this.router.navigate(['/']);
         });
 
   }
@@ -61,6 +64,8 @@ export class PostService {
               updatedPosts[oldPostIndex] = post;
               this.posts = updatedPosts;
               this.postsUpdated.next([...this.posts]);
+
+              this.router.navigate(['/']);
           });
   }
 
