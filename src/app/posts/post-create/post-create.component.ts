@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import {PostService} from '../post.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Post} from '../post.model';
@@ -14,9 +14,18 @@ export class PostCreateComponent implements OnInit {
   private mode = 'create';
   private postId: string;
   isLoading = false;
+  form: FormGroup;
   constructor(public postsService: PostService, public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      'title': new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3) ]
+      }),
+      'content': new FormControl(null, {
+        validators: [Validators.required]
+      })
+    });
     // in-built subscribers we never need to un-subscribe
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postId')) {
@@ -27,6 +36,11 @@ export class PostCreateComponent implements OnInit {
             .subscribe(postData => {
               this.isLoading = false;
               this.post = {id: postData._id, title: postData.title, content: postData.content};
+            //  initializing the angular form template
+              this.form.setValue({
+                title: this.post.title,
+                content: this.post.content
+              });
             });
       } else {
         this.mode = 'create';
@@ -35,18 +49,19 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onSavePost(form: NgForm) {
+  onSavePost() {
     // console.dir(postInput)
-    if (form.invalid) {
+    if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === 'edit') {
-      this.postsService.updatePost(this.postId, form.value.title, form.value.content);
+      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content);
     } else {
-      this.postsService.addPost(form.value.title, form.value.content);
+      this.postsService.addPost(this.form.value.title, this.form.value.content);
     }
-    form.resetForm();
+    // reactive forms use reset() and not resetForm()
+    this.form.reset();
   }
 
 }
