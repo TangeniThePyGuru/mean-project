@@ -15,6 +15,7 @@ export class PostCreateComponent implements OnInit {
   private postId: string;
   isLoading = false;
   form: FormGroup;
+  imagePreview: string;
   constructor(public postsService: PostService, public route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -24,6 +25,9 @@ export class PostCreateComponent implements OnInit {
       }),
       'content': new FormControl(null, {
         validators: [Validators.required]
+      }),
+      'image': new FormControl(null, {
+        validators: [Validators.required, Validators]
       })
     });
     // in-built subscribers we never need to un-subscribe
@@ -62,6 +66,22 @@ export class PostCreateComponent implements OnInit {
     }
     // reactive forms use reset() and not resetForm()
     this.form.reset();
+  }
+
+  onImagePicked(event: Event) {
+    // type conversion
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    // synchronous function
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+    console.log(file);
+    console.log(this.form);
   }
 
 }
