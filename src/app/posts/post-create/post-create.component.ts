@@ -3,6 +3,7 @@ import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import {PostService} from '../post.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Post} from '../post.model';
+import {mimeType} from './mine-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -27,7 +28,8 @@ export class PostCreateComponent implements OnInit {
         validators: [Validators.required]
       }),
       'image': new FormControl(null, {
-        validators: [Validators.required, Validators]
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
       })
     });
     // in-built subscribers we never need to un-subscribe
