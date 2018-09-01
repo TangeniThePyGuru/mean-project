@@ -52,4 +52,12 @@
     creating and adding items can actually be done on the same form
     [ngModel] is different from ngModel
     [ngModel] binds to a specific attribute
-    ngModel binds to a specific
+    ngModel binds to a specific property
+
+-- Converting form from ngForm to Reactive Form
+    remove [ngModel], [ngForm], #x, x.invalid
+    replace formControlName, formGroup, form.get('x').invalid
+
+-- Installing the multer package for multimedia
+    npm install --save multer
+    - allows us to extract incoming files
